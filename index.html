@@ -38,8 +38,8 @@
     <section class="row controls" v-else>
       <div class="small-12 columns">
         <button id="attack" @click="attack">ATTACK</button>
-        <button id="special-attack" @click="spAttack">SPECIAL ATTACK</button>
-        <button id="heal" @click="heal">HEAL</button>
+        <button id="special-attack" @click="spAttack">SPECIAL ATTACK({{ specialCount }})</button>
+        <button id="heal" @click="heal">Healing potions({{ healthCount }})</button>
         <button id="give-up" @click="giveUp">GIVE UP</button>
       </div>
     </section>

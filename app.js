@@ -4,13 +4,18 @@ new Vue({
     playerHealth: 100,
     monsterHealth: 100,
     gamisIsRunning: false,
-    turns: []
+    turns: [],
+    specialCount: 3,
+    healthCount: 3
   },
   methods: {
     startGame: function () {
-      this.gamisIsRunning = true
       this.playerHealth = 100
       this.monsterHealth = 100
+      this.specialCount = 3
+      this.healthCount = 3
+      this.turns = []
+      this.gamisIsRunning = true
     },
     attack: function () {
       let damage = this.calculateDamage(3, 10)
@@ -22,23 +27,30 @@ new Vue({
       if (this.checkWinner()) {
         return
       }
-
       this.monsterAttack()
     },
     spAttack: function () {
+      if (this.specialCount <= 0) {
+        alert('You have exceeded your special attacks number')
+        return
+      }
       const damage = this.calculateDamage(10, 20)
       this.monsterHealth -= damage
       this.turns.unshift({
         isPlayer: true,
-        text: `Player hits monster for ${damage}`
+        text: `Player hits monster hard for ${damage}`
       })
       if (this.checkWinner()) {
         return
       }
-
+      this.specialCount --
       this.monsterAttack()
     },
     heal: function () {
+      if (this.healthCount <= 0) {
+        alert('You doesn\'t have potions anymore...')
+        return
+      }
       if (this.playerHealth <= 90) {
         this.playerHealth += 10
         this.turns.unshift({
@@ -48,6 +60,7 @@ new Vue({
       } else {
         this.playerHealth = 100
       }
+      this.healthCount --
       this.monsterAttack()
     },
     giveUp: function () {
@@ -78,7 +91,6 @@ new Vue({
       this.checkWinner()
     },
     gameOver: function () {
-      this.turns = []
       this.gamisIsRunning = false
     }
   }

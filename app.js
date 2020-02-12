@@ -3,7 +3,8 @@ new Vue({
   data: {
     playerHealth: 100,
     monsterHealth: 100,
-    gamisIsRunning: false
+    gamisIsRunning: false,
+    turns: []
   },
   methods: {
     startGame: function () {
@@ -12,8 +13,12 @@ new Vue({
       this.monsterHealth = 100
     },
     attack: function () {
-      this.monsterHealth -= this.calculateDamage(3, 10)
-
+      let damage = this.calculateDamage(3, 10)
+      this.monsterHealth -= damage
+      this.turns.unshift({
+        isPlayer: true,
+        text: `Player hits monster for ${damage}`
+      })
       if (this.checkWinner()) {
         return
       }
@@ -21,8 +26,12 @@ new Vue({
       this.monsterAttack()
     },
     spAttack: function () {
-      this.monsterHealth -= this.calculateDamage(10, 20)
-
+      const damage = this.calculateDamage(10, 20)
+      this.monsterHealth -= damage
+      this.turns.unshift({
+        isPlayer: true,
+        text: `Player hits monster for ${damage}`
+      })
       if (this.checkWinner()) {
         return
       }
@@ -32,13 +41,17 @@ new Vue({
     heal: function () {
       if (this.playerHealth <= 90) {
         this.playerHealth += 10
+        this.turns.unshift({
+          isPlayer: true,
+          text: `Player heals for 10`
+        })
       } else {
         this.playerHealth = 100
       }
       this.monsterAttack()
     },
     giveUp: function () {
-      this.gamisIsRunning = false
+      this.gameOver()
     },
     calculateDamage: function (min, max) {
       return Math.max(Math.floor(Math.random() * max) + 1, min)
@@ -46,18 +59,27 @@ new Vue({
     checkWinner: function () {
       if (this.monsterHealth <= 0) {
         alert('You won')
-        this.gamisIsRunning = false
+        this.gameOver()
         return true
       }else if (this.playerHealth <= 0) {
         alert('You Lost')
-        this.gamisIsRunning = false
+        this.gameOver()
         return true
       }
       return false
     },
     monsterAttack: function () {
-      this.playerHealth -=  this.calculateDamage(5, 12)
+      let damage = this.calculateDamage(5, 12)
+      this.playerHealth -= damage
+      this.turns.unshift({
+        isPlayer: false,
+        text: `Monster hits player for ${damage}`
+      })
       this.checkWinner()
+    },
+    gameOver: function () {
+      this.turns = []
+      this.gamisIsRunning = false
     }
   }
 })

@@ -14,17 +14,12 @@ new Vue({
     attack: function () {
       this.monsterHealth -= this.calculateDamage(3, 10)
 
-      if (this.monsterHealth <= 0) {
-        alert('You won')
-        return this.gamisIsRunning = false
+      if (this.checkWinner()) {
+        return
       }
 
       this.playerHealth -=  this.calculateDamage(5, 12)
-
-      if (this.playerHealth <= 0) {
-        alert('You Lost')
-        return this.gamisIsRunning = false
-      }
+      this.checkWinner()
     },
     spAttack: function () {
       
@@ -37,6 +32,18 @@ new Vue({
     },
     calculateDamage: function (min, max) {
       return Math.max(Math.floor(Math.random() * max) + 1, min)
+    },
+    checkWinner: function () {
+      if (this.monsterHealth <= 0) {
+        alert('You won')
+        this.gamisIsRunning = false
+        return true
+      }else if (this.playerHealth <= 0) {
+        alert('You Lost')
+        this.gamisIsRunning = false
+        return true
+      }
+      return false
     }
   }
 })

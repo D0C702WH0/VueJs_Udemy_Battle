@@ -18,14 +18,24 @@ new Vue({
         return
       }
 
-      this.playerHealth -=  this.calculateDamage(5, 12)
-      this.checkWinner()
+      this.monsterAttack()
     },
     spAttack: function () {
-      
+      this.monsterHealth -= this.calculateDamage(10, 20)
+
+      if (this.checkWinner()) {
+        return
+      }
+
+      this.monsterAttack()
     },
     heal: function () {
-      
+      if (this.playerHealth <= 90) {
+        this.playerHealth += 10
+      } else {
+        this.playerHealth = 100
+      }
+      this.monsterAttack()
     },
     giveUp: function () {
       
@@ -44,6 +54,10 @@ new Vue({
         return true
       }
       return false
+    },
+    monsterAttack: function () {
+      this.playerHealth -=  this.calculateDamage(5, 12)
+      this.checkWinner()
     }
   }
 })

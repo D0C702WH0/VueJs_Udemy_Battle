@@ -1,20 +1,35 @@
 <template>
-  <section class="row">
-    <app-player
-      v-for="player in players"
-      :key="player"
-      :player="player.player"
-      :playerHealth="player.playerHealth"
+  <div>
+    <section class="row">
+      <app-player
+        v-for="player in players"
+        :key="player"
+        :player="player.player"
+        :playerHealth="player.playerHealth"
+      />
+    </section>
+    <app-controls
+      :startGame="startGame"
+      :attack="attack"
+      :spAttack="spAttack"
+      :heal="heal"
+      :giveUp="giveUp"
+      :healthCount="healthCount"
+      :specialCount="specialCount"
+      :gameIsRunning="gameIsRunning"
     />
-  </section>
+  </div>
 </template>
 
 <script>
 import Player from './components/player'
+import Controls from './components/controls'
+
 export default {
   name: 'app',
   components: {
-    appPlayer: Player
+    appPlayer: Player,
+    appControls: Controls
   },
   data () {
     return {
@@ -28,7 +43,7 @@ export default {
           playerHealth: 100
         }
       ],
-      gamisIsRunning: false,
+      gameIsRunning: false,
       turns: [],
       specialCount: 3,
       healthCount: 3
@@ -41,7 +56,7 @@ export default {
       this.specialCount = 3
       this.healthCount = 3
       this.turns = []
-      this.gamisIsRunning = true
+      this.gameIsRunning = true
     },
     attack: function () {
       const damage = this.calculateDamage(3, 10)

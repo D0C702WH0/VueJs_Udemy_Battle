@@ -1,47 +1,50 @@
 <template>
-  <div>
-    <section class="row">
-      <app-player
-        v-for="player in players"
-        :key="player"
-        :player="player.player"
-        :playerHealth="player.playerHealth"
+    <div>
+      <section class="row">
+        <app-player
+          v-for="player in players"
+          :key="player"
+          :player="player.player"
+          :playerHealth="player.playerHealth" />
+      </section>
+      <app-controls
+        :startGame="startGame"
+        :attack="attack"
+        :spAttack="spAttack"
+        :heal="heal"
+        :giveUp="giveUp"
+        :healthCount="healthCount"
+        :specialCount="specialCount"
+        :gameIsRunning="gameIsRunning" />
+      <app-log
+        v-if="turns.length"
+        :turns="turns"
       />
-    </section>
-    <app-controls
-      :startGame="startGame"
-      :attack="attack"
-      :spAttack="spAttack"
-      :heal="heal"
-      :giveUp="giveUp"
-      :healthCount="healthCount"
-      :specialCount="specialCount"
-      :gameIsRunning="gameIsRunning"
-    />
-  </div>
+    </div>
 </template>
 
 <script>
 import Player from './components/player'
 import Controls from './components/controls'
+import Log from './components/log'
 
 export default {
   name: 'app',
   components: {
     appPlayer: Player,
-    appControls: Controls
+    appControls: Controls,
+    appLog: Log
   },
   data () {
     return {
-      players: [
-        {
-          player: 'You',
-          playerHealth: 100
-        },
-        {
-          player: 'Monster',
-          playerHealth: 100
-        }
+      players: [{
+        player: 'You',
+        playerHealth: 100
+      },
+      {
+        player: 'Monster',
+        playerHealth: 100
+      }
       ],
       gameIsRunning: false,
       turns: [],
@@ -51,8 +54,8 @@ export default {
   },
   methods: {
     startGame: function () {
-      this.playerHealth = 100
-      this.monsterHealth = 100
+      this.players[0].playerHealth = 100
+      this.players[1].playerHealth = 100
       this.specialCount = 3
       this.healthCount = 3
       this.turns = []
@@ -60,7 +63,7 @@ export default {
     },
     attack: function () {
       const damage = this.calculateDamage(3, 10)
-      this.monsterHealth -= damage
+      this.players[1].playerHealth -= damage
       this.turns.unshift({
         isPlayer: true,
         text: `Player hits monster for ${damage}`
@@ -76,7 +79,7 @@ export default {
         return
       }
       const damage = this.calculateDamage(10, 20)
-      this.monsterHealth -= damage
+      this.players[1].playerHealth -= damage
       this.turns.unshift({
         isPlayer: true,
         text: `Player hits monster hard for ${damage}`
@@ -92,14 +95,14 @@ export default {
         alert("You doesn't have potions anymore...")
         return
       }
-      if (this.playerHealth <= 90) {
-        this.playerHealth += 10
+      if (this.players[0].playerHealth <= 90) {
+        this.players[0].playerHealth += 10
         this.turns.unshift({
           isPlayer: true,
           text: 'Player heals for 10'
         })
       } else {
-        this.playerHealth = 100
+        this.players[0].playerHealth = 100
       }
       this.healthCount--
       this.monsterAttack()
@@ -111,11 +114,11 @@ export default {
       return Math.max(Math.floor(Math.random() * max) + 1, min)
     },
     checkWinner: function () {
-      if (this.monsterHealth <= 0) {
+      if (this.players[1].playerHealth <= 0) {
         alert('You won')
         this.gameOver()
         return true
-      } else if (this.playerHealth <= 0) {
+      } else if (this.players[0].playerHealth <= 0) {
         alert('You Lost')
         this.gameOver()
         return true
@@ -124,7 +127,7 @@ export default {
     },
     monsterAttack: function () {
       const damage = this.calculateDamage(5, 12)
-      this.playerHealth -= damage
+      this.players[0].playerHealth -= damage
       this.turns.unshift({
         isPlayer: false,
         text: `Monster hits player for ${damage}`
@@ -132,7 +135,7 @@ export default {
       this.checkWinner()
     },
     gameOver: function () {
-      this.gamisIsRunning = false
+      this.gameIsRunning = false
     }
   }
 }

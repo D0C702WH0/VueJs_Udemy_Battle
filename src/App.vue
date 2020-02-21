@@ -1,60 +1,127 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+  <section class="row">
+    <app-player
+      v-for="player in players"
+      :key="player"
+      :player="player.player"
+      :playerHealth="player.playerHealth"
+    />
+  </section>
 </template>
 
 <script>
+import Player from "./components/player";
 export default {
-  name: 'app',
-  data () {
+  name: "app",
+  components: {
+    appPlayer: Player
+  },
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      players: [
+        {
+          player: "You",
+          playerHealth: 100
+        },
+        {
+          player: "Monster",
+          playerHealth: 100
+        }
+      ],
+      gamisIsRunning: false,
+      turns: [],
+      specialCount: 3,
+      healthCount: 3
+    };
+  },
+  methods: {
+    startGame: function() {
+      this.playerHealth = 100;
+      this.monsterHealth = 100;
+      this.specialCount = 3;
+      this.healthCount = 3;
+      this.turns = [];
+      this.gamisIsRunning = true;
+    },
+    attack: function() {
+      let damage = this.calculateDamage(3, 10);
+      this.monsterHealth -= damage;
+      this.turns.unshift({
+        isPlayer: true,
+        text: `Player hits monster for ${damage}`
+      });
+      if (this.checkWinner()) {
+        return;
+      }
+      this.monsterAttack();
+    },
+    spAttack: function() {
+      if (this.specialCount <= 0) {
+        alert("You have exceeded your special attacks number");
+        return;
+      }
+      const damage = this.calculateDamage(10, 20);
+      this.monsterHealth -= damage;
+      this.turns.unshift({
+        isPlayer: true,
+        text: `Player hits monster hard for ${damage}`
+      });
+      if (this.checkWinner()) {
+        return;
+      }
+      this.specialCount--;
+      this.monsterAttack();
+    },
+    heal: function() {
+      if (this.healthCount <= 0) {
+        alert("You doesn't have potions anymore...");
+        return;
+      }
+      if (this.playerHealth <= 90) {
+        this.playerHealth += 10;
+        this.turns.unshift({
+          isPlayer: true,
+          text: `Player heals for 10`
+        });
+      } else {
+        this.playerHealth = 100;
+      }
+      this.healthCount--;
+      this.monsterAttack();
+    },
+    giveUp: function() {
+      this.gameOver();
+    },
+    calculateDamage: function(min, max) {
+      return Math.max(Math.floor(Math.random() * max) + 1, min);
+    },
+    checkWinner: function() {
+      if (this.monsterHealth <= 0) {
+        alert("You won");
+        this.gameOver();
+        return true;
+      } else if (this.playerHealth <= 0) {
+        alert("You Lost");
+        this.gameOver();
+        return true;
+      }
+      return false;
+    },
+    monsterAttack: function() {
+      let damage = this.calculateDamage(5, 12);
+      this.playerHealth -= damage;
+      this.turns.unshift({
+        isPlayer: false,
+        text: `Monster hits player for ${damage}`
+      });
+      this.checkWinner();
+    },
+    gameOver: function() {
+      this.gamisIsRunning = false;
     }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>

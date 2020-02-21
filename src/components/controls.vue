@@ -28,7 +28,7 @@ export default {
     healthCount: Number,
     specialCount: Number
   }
-};
+}
 </script>
 
 <style>

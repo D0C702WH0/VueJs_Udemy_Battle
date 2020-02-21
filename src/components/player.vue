@@ -17,7 +17,7 @@ export default {
     player: String,
     playerHealth: Number
   }
-};
+}
 </script>
 
 <style>

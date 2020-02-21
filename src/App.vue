@@ -10,21 +10,21 @@
 </template>
 
 <script>
-import Player from "./components/player";
+import Player from './components/player'
 export default {
-  name: "app",
+  name: 'app',
   components: {
     appPlayer: Player
   },
-  data() {
+  data () {
     return {
       players: [
         {
-          player: "You",
+          player: 'You',
           playerHealth: 100
         },
         {
-          player: "Monster",
+          player: 'Monster',
           playerHealth: 100
         }
       ],
@@ -32,95 +32,95 @@ export default {
       turns: [],
       specialCount: 3,
       healthCount: 3
-    };
+    }
   },
   methods: {
-    startGame: function() {
-      this.playerHealth = 100;
-      this.monsterHealth = 100;
-      this.specialCount = 3;
-      this.healthCount = 3;
-      this.turns = [];
-      this.gamisIsRunning = true;
+    startGame: function () {
+      this.playerHealth = 100
+      this.monsterHealth = 100
+      this.specialCount = 3
+      this.healthCount = 3
+      this.turns = []
+      this.gamisIsRunning = true
     },
-    attack: function() {
-      let damage = this.calculateDamage(3, 10);
-      this.monsterHealth -= damage;
+    attack: function () {
+      const damage = this.calculateDamage(3, 10)
+      this.monsterHealth -= damage
       this.turns.unshift({
         isPlayer: true,
         text: `Player hits monster for ${damage}`
-      });
+      })
       if (this.checkWinner()) {
-        return;
+        return
       }
-      this.monsterAttack();
+      this.monsterAttack()
     },
-    spAttack: function() {
+    spAttack: function () {
       if (this.specialCount <= 0) {
-        alert("You have exceeded your special attacks number");
-        return;
+        alert('You have exceeded your special attacks number')
+        return
       }
-      const damage = this.calculateDamage(10, 20);
-      this.monsterHealth -= damage;
+      const damage = this.calculateDamage(10, 20)
+      this.monsterHealth -= damage
       this.turns.unshift({
         isPlayer: true,
         text: `Player hits monster hard for ${damage}`
-      });
+      })
       if (this.checkWinner()) {
-        return;
+        return
       }
-      this.specialCount--;
-      this.monsterAttack();
+      this.specialCount--
+      this.monsterAttack()
     },
-    heal: function() {
+    heal: function () {
       if (this.healthCount <= 0) {
-        alert("You doesn't have potions anymore...");
-        return;
+        alert("You doesn't have potions anymore...")
+        return
       }
       if (this.playerHealth <= 90) {
-        this.playerHealth += 10;
+        this.playerHealth += 10
         this.turns.unshift({
           isPlayer: true,
-          text: `Player heals for 10`
-        });
+          text: 'Player heals for 10'
+        })
       } else {
-        this.playerHealth = 100;
+        this.playerHealth = 100
       }
-      this.healthCount--;
-      this.monsterAttack();
+      this.healthCount--
+      this.monsterAttack()
     },
-    giveUp: function() {
-      this.gameOver();
+    giveUp: function () {
+      this.gameOver()
     },
-    calculateDamage: function(min, max) {
-      return Math.max(Math.floor(Math.random() * max) + 1, min);
+    calculateDamage: function (min, max) {
+      return Math.max(Math.floor(Math.random() * max) + 1, min)
     },
-    checkWinner: function() {
+    checkWinner: function () {
       if (this.monsterHealth <= 0) {
-        alert("You won");
-        this.gameOver();
-        return true;
+        alert('You won')
+        this.gameOver()
+        return true
       } else if (this.playerHealth <= 0) {
-        alert("You Lost");
-        this.gameOver();
-        return true;
+        alert('You Lost')
+        this.gameOver()
+        return true
       }
-      return false;
+      return false
     },
-    monsterAttack: function() {
-      let damage = this.calculateDamage(5, 12);
-      this.playerHealth -= damage;
+    monsterAttack: function () {
+      const damage = this.calculateDamage(5, 12)
+      this.playerHealth -= damage
       this.turns.unshift({
         isPlayer: false,
         text: `Monster hits player for ${damage}`
-      });
-      this.checkWinner();
+      })
+      this.checkWinner()
     },
-    gameOver: function() {
-      this.gamisIsRunning = false;
+    gameOver: function () {
+      this.gamisIsRunning = false
     }
   }
-};
+}
 </script>
 
 <style>

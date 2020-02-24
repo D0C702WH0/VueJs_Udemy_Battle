@@ -17,16 +17,30 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  props: {
-    gameIsRunning: Boolean,
-    attack: Function,
-    spAttack: Function,
-    heal: Function,
-    giveUp: Function,
-    startGame: Function,
-    healthCount: Number,
-    specialCount: Number
+  computed: mapState({
+    healthCount: state => state.healthCount,
+    specialCount: state => state.specialCount,
+    gameIsRunning: state => state.gameIsRunning
+  }),
+  methods: {
+    startGame () {
+      this.$store.commit('startGame')
+    },
+    attack () {
+      this.$store.commit('attack')
+    },
+    spAttack () {
+      this.$store.commit('spAttack')
+    },
+    heal () {
+      this.$store.commit('heal')
+    },
+    giveUp () {
+      this.$store.commit('giveUp')
+    }
   }
 }
 </script>

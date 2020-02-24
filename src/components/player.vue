@@ -1,12 +1,12 @@
 <template>
   <div class="small-6 columns">
-    <h1 class="text-center">{{ player }}</h1>
+    <h1 class="text-center">{{ player.player }}</h1>
     <div class="healthbar">
       <div
         class="healthbar text-center"
         style="background-color: green; margin: 0; color: white;"
-        :style="{width: playerHealth + '%'}"
-      >{{ playerHealth }}</div>
+        :style="{width: player.playerHealth + '%'}"
+      >{{ player.playerHealth }}</div>
     </div>
   </div>
 </template>
@@ -14,8 +14,7 @@
 <script>
 export default {
   props: {
-    player: String,
-    playerHealth: Number
+    player: Object
   }
 }
 </script>

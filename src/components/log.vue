@@ -3,8 +3,8 @@
     <div class="small-12 columns">
       <ul>
         <li
-        v-for="turn in turns"
-        :key="turn"
+        v-for="(turn, index) in turns"
+        :key="index"
         :class="[turn.isPlayer ? 'player-turn' : 'monster-turn']"
         >{{ turn.text }}</li>
       </ul>

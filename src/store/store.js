@@ -1,37 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { gameOver, monsterAttack, checkWinner, calculateDamage } from '../lib/helpers'
 
 Vue.use(Vuex)
-
-const calculateDamage = (min, max) => {
-  return Math.max(Math.floor(Math.random() * max) + 1, min)
-}
-
-const checkWinner = (state) => {
-  if (state.players[1].playerHealth <= 0) {
-    alert('You won')
-    gameOver()
-    return true
-  } else if (state.players[0].playerHealth <= 0) {
-    alert('You Lost')
-    gameOver(state)
-    return true
-  }
-  return false
-}
-const monsterAttack = (state) => {
-  const damage = calculateDamage(5, 12)
-  state.players[0].playerHealth -= damage
-  state.turns.unshift({
-    isPlayer: false,
-    text: `Monster hits player for ${damage}`
-  })
-  checkWinner(state)
-}
-
-const gameOver = (state) => {
-  state.gameIsRunning = false
-}
 
 export default new Vuex.Store({
   state: {

@@ -49,6 +49,15 @@ export default new Vuex.Store({
     specialCount: 3,
     healthCount: 3
   },
+
+  getters: {
+    getPlayers: state => state.players,
+    getGameStatus: state => state.gameIsRunning,
+    getTurns: state => state.turns,
+    getSpCount: state => state.specialCount,
+    getHealthCount: state => state.healthCount
+  },
+
   mutations: {
     startGame: function (state) {
       state.players[0].playerHealth = 100

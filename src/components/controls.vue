@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="row controls" v-if="!gameIsRunning">
+    <section class="row controls" v-if="!getGameStatus">
       <div class="small-12 columns">
         <button id="start-game" @click="startGame">START NEW GAME</button>
       </div>
@@ -8,8 +8,8 @@
     <section class="row controls" v-else>
       <div class="small-12 columns">
         <button id="attack" @click="attack">ATTACK</button>
-        <button id="special-attack" @click="spAttack">SPECIAL ATTACK({{ specialCount }})</button>
-        <button id="heal" @click="heal">Healing potions({{ healthCount }})</button>
+        <button id="special-attack" @click="spAttack">SPECIAL ATTACK({{ getSpCount }})</button>
+        <button id="heal" @click="heal">Healing potions({{ getHealthCount }})</button>
         <button id="give-up" @click="giveUp">GIVE UP</button>
       </div>
     </section>
@@ -17,14 +17,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  computed: mapState({
-    healthCount: state => state.healthCount,
-    specialCount: state => state.specialCount,
-    gameIsRunning: state => state.gameIsRunning
-  }),
+  computed: {
+    ...mapGetters([
+      'getHealthCount', 'getSpCount', 'getGameStatus'
+    ])
+  },
   methods: {
     startGame () {
       this.$store.commit('startGame')

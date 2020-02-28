@@ -2,6 +2,8 @@
 
 > A Vue.js project
 
+Choose a branch to see one version of this project
+
 ## Branch VuexStateManagement
 
 Vue battle using Vue framework && Vuex state management
